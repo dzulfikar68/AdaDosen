@@ -3,8 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.digitcreativestudio.safian.adadosen.MainActivity">
     <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="@string/action_refresh"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/action_options"
+        android:icon="@drawable/ic_action_more_vert"
         android:title="@string/action_options"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="always" >
+        <menu>
+            <item
+                android:id="@+id/action_change_password"
+                android:title="@string/action_change_password"/>
+            <item
+                android:id="@+id/action_logout"
+                android:title="@string/action_logout"/>
+        </menu>
+    </item>
 </menu>

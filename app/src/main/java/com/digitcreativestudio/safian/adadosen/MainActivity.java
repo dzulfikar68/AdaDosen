@@ -67,9 +67,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_options) {
+        if (id == R.id.action_logout) {
             new Logout(MainActivity.this).execute();
             return true;
+        }else if(id == R.id.action_refresh){
+            listView.removeAllViewsInLayout();
+            new FetchLecturers(MainActivity.this).execute();
         }
 
         return super.onOptionsItemSelected(item);
