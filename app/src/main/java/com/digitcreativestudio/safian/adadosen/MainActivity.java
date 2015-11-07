@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if(session.isLoggedIn()){
+            getMenuInflater().inflate(R.menu.menu_logged_in, menu);
+        }else{
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
         return true;

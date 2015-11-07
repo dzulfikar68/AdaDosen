@@ -57,6 +57,8 @@ public class LecturersAdapter extends BaseAdapter {
         nip.setText(lecturer.getNip());
         lastModify.setText(lecturer.getLastModify());
         modifiedBy.setText(lecturer.getModifiedBy());
+
+        status.setOnCheckedChangeListener(null);
         status.setChecked(lecturer.getStatus());
         status.setTag(lecturer.getId());
         parentLL.setId(lecturer.getId());
