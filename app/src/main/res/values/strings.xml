@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Ada Dosen?</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Daftar Dosen</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_options">Logout</string>
 </resources>
