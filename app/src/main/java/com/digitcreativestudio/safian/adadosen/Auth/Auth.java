@@ -25,7 +25,6 @@ public class Auth extends AsyncTask<String, Void, String> {
     Activity mActivity;
 
     ProgressDialog pDialog;
-    String charset = "UTF-8";
 
     SessionManager session;
 
@@ -47,10 +46,10 @@ public class Auth extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         String responseString = "";
-        String welcome = "";
         InputStream response = null;
         int timeout=10000; //in milisecond = 10 detik
         HttpURLConnection urlConnection = null;
+        String charset = "UTF-8";
 
         try {
 

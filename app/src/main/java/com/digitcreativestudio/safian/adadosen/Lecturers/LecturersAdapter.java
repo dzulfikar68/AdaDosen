@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -48,6 +49,7 @@ public class LecturersAdapter extends BaseAdapter {
         TextView lastModify = (TextView) vi.findViewById(R.id.lastModify);
         TextView modifiedBy = (TextView) vi.findViewById(R.id.modifiedBy);
         ToggleButton status = (ToggleButton) vi.findViewById(R.id.status);
+        LinearLayout parentLL = (LinearLayout) (name.getParent());
 
         Lecturer lecturer = mLecturers.get(position);
         //id.setText(lecturer.getId());
@@ -57,6 +59,7 @@ public class LecturersAdapter extends BaseAdapter {
         modifiedBy.setText(lecturer.getModifiedBy());
         status.setChecked(lecturer.getStatus());
         status.setTag(lecturer.getId());
+        parentLL.setId(lecturer.getId());
         status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity));
 
         return vi;
