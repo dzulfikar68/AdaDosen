@@ -54,6 +54,7 @@ public class LecturersAdapter extends BaseAdapter {
         LinearLayout parentLL = (LinearLayout) (name.getParent());
 
         Lecturer lecturer = mLecturers.get(position);
+        mLecturers.get(position).setPosition(position);
         //id.setText(lecturer.getId());
         name.setText(lecturer.getName());
         nip.setText(lecturer.getNip());
@@ -66,12 +67,16 @@ public class LecturersAdapter extends BaseAdapter {
         status.setTag(lecturer.getId());
 
         if(session.isLoggedIn()){
-            status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity));
+            status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
             status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
         }else{
             status.setEnabled(false);
             status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_guest));
         }
         return vi;
+    }
+
+    public ArrayList<Lecturer> getLecturers(){
+        return mLecturers;
     }
 }

@@ -48,13 +48,22 @@ public class SessionManager {
      * */
     public void createLoginSession(String id, String nim, String name){
         // Storing login value as TRUE
+        String[] nameArray = name.split("\\s+");
+        String newName = "";
+        for(int i = 0; i < nameArray.length; i++){
+            if(i>1){
+                newName += " "+nameArray[i].charAt(0)+".";
+            }else{
+                newName += " "+nameArray[i];
+            }
+        }
         editor.putBoolean(IS_LOGIN, true);
 
         editor.putString(KEY_ID, id);
 
         editor.putString(KEY_NIM, nim);
 
-        editor.putString(KEY_NAME, name);
+        editor.putString(KEY_NAME, newName);
 
         // commit changes
         editor.commit();

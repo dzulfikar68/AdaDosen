@@ -95,8 +95,8 @@ public class Auth extends AsyncTask<String, Void, String> {
             return message;
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
-            return null;
+
+            return "Exception Caught";
         } finally{
             urlConnection.disconnect();
         }
@@ -107,15 +107,22 @@ public class Auth extends AsyncTask<String, Void, String> {
         super.onPostExecute(s);
         pDialog.dismiss();
 
-        if(success){
-            Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
-            if(session.isLoggedIn()){
-                Intent i = new Intent(mActivity, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                mActivity.startActivity(i);
-            }
+        if(s.equalsIgnoreCase("Exception Caught"))
+        {
+            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
         }else{
-            new MyAlertDialog(mActivity, "Login gagal", s);
+            if(success){
+                Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
+                if(session.isLoggedIn()){
+                    Intent i = new Intent(mActivity, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    mActivity.startActivity(i);
+                }
+            }else{
+                new MyAlertDialog(mActivity, "Login gagal", s);
+            }
         }
+
+
     }
 }

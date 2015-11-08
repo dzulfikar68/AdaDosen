@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -21,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.TimeZone;
 
 /**
@@ -29,7 +31,7 @@ import java.util.TimeZone;
 public class LecturerUpdate extends AsyncTask<String, Void, String> {
     private Activity mActivity;
     private ProgressDialog pDialog;
-    private String id, status, modifiedBy, lastModify;
+    private String id, status, modifiedBy, lastModify, position;
     private boolean success = false;
     private SessionManager session;
 
@@ -50,7 +52,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        id = params[0]; status = params[1].equals("true") ? "1" : "0"; modifiedBy = params[2]; lastModify = params[3];
+        id = params[0]; status = params[1].equals("true") ? "1" : "0"; modifiedBy = params[2]; lastModify = params[3]; position = params[4];
         //Log.e("Updated", id + " By: " + modifiedBy + " At: " + lastModify + " To: " + status);
         String responseString = "";
         InputStream response = null;
@@ -94,8 +96,8 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
             return jObj.getString("message");
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
-            return null;
+
+            return "Exception Caught";
         } finally{
             urlConnection.disconnect();
         }
@@ -107,27 +109,47 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         pDialog.dismiss();
-        Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
-
-        LinearLayout parent = (LinearLayout) mActivity.findViewById(Integer.valueOf(id));
-        ToggleButton statusBtn = (ToggleButton) parent.findViewById(R.id.status);
-        if(success){
-            try{
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                SimpleDateFormat sdf2nd = new SimpleDateFormat("HH:mm dd-MM-yyyy");
-                sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-                lastModify = sdf2nd.format(sdf.parse(lastModify));
-
-                ((TextView) parent.findViewById(R.id.lastModify)).setText(lastModify);
-                ((TextView) parent.findViewById(R.id.modifiedBy)).setText((session.getUserDetails()).get(SessionManager.KEY_NAME));
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
+        if(s.equalsIgnoreCase("Exception Caught"))
+        {
+            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
         }else{
-            statusBtn.setOnCheckedChangeListener(null);
-            statusBtn.setChecked(!status.equals("1"));
-            statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity));
+            Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
+
+            LinearLayout parent = (LinearLayout) mActivity.findViewById(Integer.valueOf(id));
+            ToggleButton statusBtn = (ToggleButton) parent.findViewById(R.id.status);
+            if(success){
+                try{
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat sdf2nd = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+                    sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+                    lastModify = sdf2nd.format(sdf.parse(lastModify));
+
+                    ((TextView) parent.findViewById(R.id.lastModify)).setText(lastModify);
+                    ((TextView) parent.findViewById(R.id.modifiedBy)).setText((session.getUserDetails()).get(SessionManager.KEY_NAME));
+
+                    ListView lv = (ListView) mActivity.findViewById(R.id.listview_lecturers);
+                    LecturersAdapter adapter = (LecturersAdapter) lv.getAdapter();
+                    ArrayList<Lecturer> lecturers = adapter.getLecturers();
+                    Lecturer lecturer = lecturers.get(Integer.valueOf(position));
+                    lecturer.setStatus(status.equals("true"));
+                    lecturer.setModifiedBy((session.getUserDetails()).get(SessionManager.KEY_NAME));
+                    lecturer.setLastModify(lastModify);
+
+                    lecturers.set(lecturer.getPosition(), lecturer);
+
+                    lv.setAdapter(null);
+                    lv.setAdapter(new LecturersAdapter(mActivity, lecturers));
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }else{
+                statusBtn.setOnCheckedChangeListener(null);
+                statusBtn.setChecked(!status.equals("1"));
+                statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position)));
+            }
         }
+
+
     }
 }

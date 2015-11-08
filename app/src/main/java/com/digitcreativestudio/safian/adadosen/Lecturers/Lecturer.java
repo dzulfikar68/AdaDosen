@@ -23,6 +23,7 @@ public class Lecturer {
     private boolean status;
     private Date lastModify;
     private String modifiedBy;
+    private int position;
 
     public Lecturer(JSONObject jObj){
         try{
@@ -34,7 +35,22 @@ public class Lecturer {
             name = jObj.getString(KEY_NAME);
             status = !(jObj.getString(KEY_STATUS)).equals("0");
             lastModify = sdf.parse(jObj.getString(KEY_LAST_MODIFY));
-            modifiedBy = jObj.getString(KEY_MODIFIED_BY);
+
+
+            modifiedBy = shortenName(jObj.getString(KEY_MODIFIED_BY));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setPosition(int position){this.position = position;}
+    public void setStatus(boolean status){this.status = status;}
+    public void setModifiedBy(String modifiedBy){this.modifiedBy = shortenName(modifiedBy);}
+    public void setLastModify(String lastModify){
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+
+            this.lastModify = sdf.parse(lastModify);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -58,5 +74,20 @@ public class Lecturer {
     public String getLastModify(){
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
         return sdf.format(lastModify);
+    }
+    public int getPosition(){return position;}
+
+    private String shortenName(String name){
+        String[] nameArray = name.split("\\s+");
+
+        String newName = "";
+        for(int i = 0; i < nameArray.length; i++){
+            if(i>1){
+                newName += " "+nameArray[i].charAt(0)+".";
+            }else{
+                newName += " "+nameArray[i];
+            }
+        }
+        return newName;
     }
 }

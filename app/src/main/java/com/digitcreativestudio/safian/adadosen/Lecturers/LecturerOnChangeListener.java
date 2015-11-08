@@ -15,9 +15,10 @@ import java.util.TimeZone;
 public class LecturerOnChangeListener implements CompoundButton.OnCheckedChangeListener {
     private Activity mActivity;
     SessionManager session;
+    private int mPosition;
 
-    public LecturerOnChangeListener(Activity activity){
-        mActivity = activity;
+    public LecturerOnChangeListener(Activity activity, int position){
+        mActivity = activity; mPosition = position;
         session = new SessionManager(mActivity.getApplicationContext());
     }
     @Override
@@ -31,7 +32,7 @@ public class LecturerOnChangeListener implements CompoundButton.OnCheckedChangeL
 
         sdf1.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        (new LecturerUpdate(mActivity)).execute(String.valueOf(id), String.valueOf(status), modifiedBy, sdf1.format(lastModify));
+        (new LecturerUpdate(mActivity)).execute(String.valueOf(id), String.valueOf(status), modifiedBy, sdf1.format(lastModify), String.valueOf(mPosition));
 
     }
 }

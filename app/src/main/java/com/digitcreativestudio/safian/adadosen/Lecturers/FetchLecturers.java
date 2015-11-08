@@ -81,7 +81,7 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
+
             return "Exception Caught";
         } finally{
             urlConnection.disconnect();
@@ -97,6 +97,12 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
 
         ListView lv = (ListView) mActivity.findViewById(R.id.listview_lecturers);
         TextView notFound = (TextView) mActivity.findViewById(R.id.notFound);
+
+        if(result.equalsIgnoreCase("Exception Caught"))
+        {
+            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
+            notFound.setVisibility(View.VISIBLE);
+        }
 
         if(result.equalsIgnoreCase("no results"))
         {
