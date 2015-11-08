@@ -95,12 +95,14 @@
         </LinearLayout>
 
         <ToggleButton
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/status"
             android:checked="false"
             android:textOn="Ada"
-            android:textOff="Tidak Ada" />
+            android:textOff="Tidak Ada"
+            android:background="@drawable/bg_red"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
