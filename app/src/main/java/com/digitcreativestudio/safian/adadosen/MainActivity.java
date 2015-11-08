@@ -10,9 +10,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.digitcreativestudio.safian.adadosen.Auth.Login;
 import com.digitcreativestudio.safian.adadosen.Auth.Logout;
 import com.digitcreativestudio.safian.adadosen.Auth.SessionManager;
 import com.digitcreativestudio.safian.adadosen.Lecturers.FetchLecturers;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     SessionManager session;
@@ -31,8 +36,13 @@ public class MainActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.login);
 
         if(session.isLoggedIn()){
-            user.setText(" "+(session.getUserDetails()).get(SessionManager.KEY_NAME));
+            user.setText(" " + (session.getUserDetails()).get(SessionManager.KEY_NAME));
             login.setVisibility(View.GONE);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+            new Login().execute(session.getUserDetails().get(SessionManager.KEY_ID), sdf.format(new Date()));
         }else{
             user.setText(" Guest");
             login.setVisibility(View.VISIBLE);

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class FetchLecturers extends AsyncTask <String, Void, String> {
     ArrayList<Lecturer> lecturers = new ArrayList<>();
     ProgressDialog pDialog;
+    int position = 0;
 
     Activity mActivity;
 
@@ -111,8 +112,14 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
         }
         else
         {
-            lv.setAdapter(new LecturersAdapter(mActivity, lecturers)); //Adapter menampilkan data mahasiswa ke dalam listView
+            LecturersAdapter adapter = new LecturersAdapter(mActivity, lecturers);
+            lv.setAdapter(adapter); //Adapter menampilkan data mahasiswa ke dalam listView
+            lv.setSelection(position);
             notFound.setVisibility(View.GONE);
         }
+    }
+
+    public void setPosition(int position){
+        this.position = position;
     }
 }

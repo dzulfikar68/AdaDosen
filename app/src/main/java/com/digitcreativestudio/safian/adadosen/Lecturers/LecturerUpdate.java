@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -21,9 +19,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.TimeZone;
 
 /**
  * Created by faqih_000 on 11/7/2015.
@@ -119,7 +114,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
             ToggleButton statusBtn = (ToggleButton) parent.findViewById(R.id.status);
             if(success){
                 try{
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                   /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     SimpleDateFormat sdf2nd = new SimpleDateFormat("HH:mm dd-MM-yyyy");
                     sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
                     lastModify = sdf2nd.format(sdf.parse(lastModify));
@@ -138,7 +133,10 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
                     lecturers.set(lecturer.getPosition(), lecturer);
 
                     lv.setAdapter(null);
-                    lv.setAdapter(new LecturersAdapter(mActivity, lecturers));
+                    lv.setAdapter(new LecturersAdapter(mActivity, lecturers));*/
+                    FetchLecturers fl = new FetchLecturers(mActivity);
+                    fl.setPosition(Integer.valueOf(position));
+                    fl.execute();
                 }catch(Exception e){
                     e.printStackTrace();
                 }
