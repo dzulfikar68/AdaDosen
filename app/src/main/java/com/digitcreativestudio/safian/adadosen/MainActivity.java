@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
         }else if(id == R.id.action_refresh){
             listView.removeAllViewsInLayout();
             new FetchLecturers(MainActivity.this).execute();
+        }else if(id == R.id.action_change_password){
+            Intent i = new Intent(MainActivity.this, ChangePasswordActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

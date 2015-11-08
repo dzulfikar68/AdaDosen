@@ -94,6 +94,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
             return jObj.getString("message");
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
             return null;
         } finally{
             urlConnection.disconnect();

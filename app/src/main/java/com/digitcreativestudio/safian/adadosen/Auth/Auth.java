@@ -81,6 +81,7 @@ public class Auth extends AsyncTask<String, Void, String> {
             responseString = sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
             return null;
         } finally{
             urlConnection.disconnect();
