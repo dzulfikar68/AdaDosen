@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.MainActivity;
+import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
 
 import org.json.JSONObject;
 
@@ -96,11 +97,14 @@ public class ChangePassword extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         pDialog.dismiss();
-        Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
+
         if(success){
+            Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
             Intent i = new Intent(mActivity, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             mActivity.startActivity(i);
+        }else{
+            new MyAlertDialog(mActivity, "Terjadi kesalahan", s);
         }
     }
 }

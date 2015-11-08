@@ -7,10 +7,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.Auth.ChangePassword;
 import com.digitcreativestudio.safian.adadosen.Auth.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
 
 public class ChangePasswordActivity extends AppCompatActivity {
     private EditText oldPassword, password, passwordConfirmation;
@@ -33,14 +33,23 @@ public class ChangePasswordActivity extends AppCompatActivity {
         changeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String oldPasswordText = oldPassword.getText().toString();
-                String passwordText = password.getText().toString();
-                String passwordConfirmationText = passwordConfirmation.getText().toString();
+                String oldPasswordText = oldPassword.getText().toString().trim();
+                String passwordText = password.getText().toString().trim();
+                String passwordConfirmationText = passwordConfirmation.getText().toString().trim();
+
+                oldPassword.setText(oldPasswordText);
+                password.setText(passwordText);
+                passwordConfirmation.setText(passwordConfirmationText);
 
                 if(!passwordText.equals(passwordConfirmationText)){
-                    Toast.makeText(ChangePasswordActivity.this, "Konfirmasi password baru tidak sesuai.", Toast.LENGTH_SHORT).show();
+                    new MyAlertDialog(ChangePasswordActivity.this, "Terjadi Kesalahan", "Konfirmasi password baru tidak sesuai.");
                 }else{
-                    new ChangePassword(ChangePasswordActivity.this).execute(session.getUserDetails().get(SessionManager.KEY_ID), oldPasswordText, passwordText, passwordConfirmationText);
+                    if(passwordText.equals("")){
+                        new MyAlertDialog(ChangePasswordActivity.this, "Terjadi Kesalahan", "Password tidak boleh kosong.");
+                    }else{
+                        new ChangePassword(ChangePasswordActivity.this).execute(session.getUserDetails().get(SessionManager.KEY_ID), oldPasswordText, passwordText, passwordConfirmationText);
+                    }
+
                 }
             }
         });

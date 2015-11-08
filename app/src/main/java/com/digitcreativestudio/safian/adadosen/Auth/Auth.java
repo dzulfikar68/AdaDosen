@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.MainActivity;
+import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -27,6 +26,8 @@ public class Auth extends AsyncTask<String, Void, String> {
     ProgressDialog pDialog;
 
     SessionManager session;
+
+    private boolean success;
 
     public Auth(Activity activity){
         mActivity = activity;
@@ -79,20 +80,11 @@ public class Auth extends AsyncTask<String, Void, String> {
             }
 
             responseString = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
-            return null;
-        } finally{
-            urlConnection.disconnect();
-        }
 
-
-        // try parse the string to a JSON object
-        try {
             JSONObject jObj = new JSONObject(responseString);
             String id = jObj.getString(SessionManager.KEY_ID);
-            if(!id.equals("-1")){
+            success = jObj.getBoolean("success");
+            if(success){
                 String nim = jObj.getString(SessionManager.KEY_NIM);
                 String name = jObj.getString(SessionManager.KEY_NAME);
 
@@ -101,23 +93,29 @@ public class Auth extends AsyncTask<String, Void, String> {
 
             String message = jObj.getString("message");
             return message;
-
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
+            return null;
+        } finally{
+            urlConnection.disconnect();
         }
-
-        return null;
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         pDialog.dismiss();
-        Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
-        if(session.isLoggedIn()){
-            Intent i = new Intent(mActivity, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            mActivity.startActivity(i);
+
+        if(success){
+            Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
+            if(session.isLoggedIn()){
+                Intent i = new Intent(mActivity, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                mActivity.startActivity(i);
+            }
+        }else{
+            new MyAlertDialog(mActivity, "Login gagal", s);
         }
     }
 }
