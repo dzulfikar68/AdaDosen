@@ -16,17 +16,10 @@
 
 package com.digitcreativestudio.safian.adadosen.GCM;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.digitcreativestudio.safian.adadosen.MainActivity;
-import com.digitcreativestudio.safian.adadosen.R;
+import com.digitcreativestudio.safian.adadosen.Utils.MyNotificationManager;
 import com.google.android.gms.gcm.GcmListenerService;
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -77,7 +70,10 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
+        MyNotificationManager notif = new MyNotificationManager(this.getApplicationContext());
+        notif.createNotification(message);
+
+        /*Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -94,7 +90,7 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());*/
 
         /*Notification notif = new NotificationCompat.Builder(this)
                 .setContentTitle(getApplicationContext().getString(R.string.app_name))

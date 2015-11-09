@@ -96,6 +96,13 @@
             android:name="com.digitcreativestudio.safian.adadosen.GCM.RegistrationIntentService"
             android:exported="false">
         </service>
+        <!-- [END GCM's COMPONENTS] -->
+
+        <receiver android:name=".Utils.MyNotificationManager">
+            <intent-filter>
+                <action android:name="notification_cancelled"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

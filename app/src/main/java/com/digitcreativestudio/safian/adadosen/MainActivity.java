@@ -23,6 +23,7 @@ import com.digitcreativestudio.safian.adadosen.Auth.Logout;
 import com.digitcreativestudio.safian.adadosen.GCM.RegistrationIntentService;
 import com.digitcreativestudio.safian.adadosen.Lecturers.FetchLecturers;
 import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
+import com.digitcreativestudio.safian.adadosen.Utils.MyNotificationManager;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -52,12 +53,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(SessionManager.REGISTRATION_COMPLETE));
+        MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
+        notif.removeNotifications();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
+        notif.removeNotifications();
 
         session = new SessionManager(getApplicationContext());
 
@@ -93,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
         pDialog.setIndeterminate(true);
         pDialog.setCancelable(false);
         pDialog.show();
-
-
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
