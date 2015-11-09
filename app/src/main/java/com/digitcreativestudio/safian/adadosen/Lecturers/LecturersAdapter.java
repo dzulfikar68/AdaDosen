@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.digitcreativestudio.safian.adadosen.Auth.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.R;
 
 import java.util.ArrayList;

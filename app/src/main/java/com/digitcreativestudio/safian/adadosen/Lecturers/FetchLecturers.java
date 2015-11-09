@@ -37,6 +37,8 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        ListView lv = (ListView) mActivity.findViewById(R.id.listview_lecturers);
+        lv.removeAllViewsInLayout();
         pDialog = new ProgressDialog(mActivity);
         pDialog.setMessage("Loading..");
         pDialog.setIndeterminate(true);
@@ -101,7 +103,7 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
 
         if(result.equalsIgnoreCase("Exception Caught"))
         {
-            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, "Terjadi Kesalahan.", Toast.LENGTH_SHORT).show();
             notFound.setVisibility(View.VISIBLE);
         }
 

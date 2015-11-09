@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.digitcreativestudio.safian.adadosen.Auth.ChangePassword;
-import com.digitcreativestudio.safian.adadosen.Auth.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
 
 public class ChangePasswordActivity extends AppCompatActivity {

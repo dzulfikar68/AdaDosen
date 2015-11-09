@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
+
 
 public class Logout extends AsyncTask<Void, Void, Void>{
     Activity mActivity;

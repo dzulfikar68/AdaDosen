@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.digitcreativestudio.safian.adadosen.Auth.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.R;
 
 import org.json.JSONObject;
@@ -106,7 +106,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         pDialog.dismiss();
         if(s.equalsIgnoreCase("Exception Caught"))
         {
-            Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, "Terjadi Kesalahan.", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
 

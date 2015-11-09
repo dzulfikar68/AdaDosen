@@ -1,4 +1,4 @@
-package com.digitcreativestudio.safian.adadosen.Auth;
+package com.digitcreativestudio.safian.adadosen.Utils;
 
 
 import android.content.Context;
@@ -35,6 +35,9 @@ public class SessionManager {
     public static final String KEY_NIM = "name";
 
     public static final String KEY_NAME = "name";
+
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
     // Constructor
     public SessionManager(Context context){
@@ -112,7 +115,9 @@ public class SessionManager {
      * */
     public void logoutUser(){
         // Clearing all data from Shared Preferences
-        editor.clear();
+        editor.remove(KEY_ID);
+        editor.remove(KEY_NIM);
+        editor.remove(KEY_NAME);
         editor.commit();
 /*
         // After logout redirect user to Loing Activity
@@ -133,5 +138,11 @@ public class SessionManager {
     // Get Login State
     public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
+    }
+
+    public void setRegistered(boolean registered){
+        editor.remove(SENT_TOKEN_TO_SERVER);
+        editor.putBoolean(SENT_TOKEN_TO_SERVER, registered);
+        editor.commit();
     }
 }

@@ -3,7 +3,7 @@ package com.digitcreativestudio.safian.adadosen.Lecturers;
 import android.app.Activity;
 import android.widget.CompoundButton;
 
-import com.digitcreativestudio.safian.adadosen.Auth.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
