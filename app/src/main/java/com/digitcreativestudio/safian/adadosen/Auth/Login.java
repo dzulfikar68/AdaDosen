@@ -32,7 +32,7 @@ public class Login extends AsyncTask<String, Void, Void> {
                     URLEncoder.encode(params[0], charset),
                     URLEncoder.encode(params[1], charset));
 
-            URL url = new URL("http://faqiharifian.xyz/api/ada_dosen/login.php");
+            URL url = new URL("http://api.arifian.com/ada_dosen/login.php");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);

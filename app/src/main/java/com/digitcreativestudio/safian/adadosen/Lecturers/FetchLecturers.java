@@ -54,7 +54,7 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
         String responseString = "";
 
         try {
-            URL url = new URL("http://faqiharifian.xyz/api/ada_dosen/fetch_lecturers.php");
+            URL url = new URL("http://api.arifian.com/ada_dosen/fetch_lecturers.php");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setConnectTimeout(timeout);

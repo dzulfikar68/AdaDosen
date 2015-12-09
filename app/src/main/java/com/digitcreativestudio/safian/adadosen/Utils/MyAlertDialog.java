@@ -14,10 +14,12 @@ public class MyAlertDialog {
 
     public MyAlertDialog(Activity activity, String title, String message){
         mActivity = activity; mTitle = title; mMessage = message; mButton = "OK";
+        createDialog();
     }
 
     public MyAlertDialog(Activity activity, String title, String message, String button){
         mActivity = activity; mTitle = title; mMessage = message; mButton = "Try Again";
+        createDialog();
     }
 
     private void createDialog(){

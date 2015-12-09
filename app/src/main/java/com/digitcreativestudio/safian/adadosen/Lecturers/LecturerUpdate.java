@@ -62,7 +62,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
                     URLEncoder.encode(modifiedBy, charset),
                     URLEncoder.encode(lastModify, charset));
 
-            URL url = new URL("http://faqiharifian.xyz/api/ada_dosen/update_lecturer.php");
+            URL url = new URL("http://api.arifian.com/ada_dosen/update_lecturer.php");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);

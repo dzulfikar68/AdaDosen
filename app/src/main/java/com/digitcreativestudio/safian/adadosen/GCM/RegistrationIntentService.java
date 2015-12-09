@@ -116,7 +116,7 @@ public class RegistrationIntentService extends IntentService {
             String query = String.format("token=%s",
                     URLEncoder.encode(token, charset));
 
-            URL url = new URL("http://faqiharifian.xyz/api/ada_dosen/register.php");
+            URL url = new URL("http://api.arifian.com/ada_dosen/register.php");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);

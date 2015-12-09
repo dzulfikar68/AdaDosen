@@ -94,11 +94,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pDialog = new ProgressDialog(MainActivity.this);
-        pDialog.setMessage("Loading..");
-        pDialog.setIndeterminate(true);
-        pDialog.setCancelable(false);
-        pDialog.show();
+
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -120,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
         };
 
         if (checkPlayServices()) {
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Loading..");
+            pDialog.setIndeterminate(true);
+            pDialog.setCancelable(false);
+            pDialog.show();
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);

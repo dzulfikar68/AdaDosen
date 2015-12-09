@@ -59,7 +59,7 @@ public class Auth extends AsyncTask<String, Void, String> {
                     URLEncoder.encode(params[0], charset),
                     URLEncoder.encode(params[1], charset));
 
-            URL url = new URL("http://www.faqiharifian.xyz/api/ada_dosen/auth.php");
+            URL url = new URL("http://api.arifian.com/ada_dosen/auth.php");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);
