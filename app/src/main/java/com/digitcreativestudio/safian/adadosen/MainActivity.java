@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                pDialog.dismiss();
+
                 sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
@@ -116,11 +116,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         if (checkPlayServices()) {
-            pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Loading..");
-            pDialog.setIndeterminate(true);
-            pDialog.setCancelable(false);
-            pDialog.show();
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
