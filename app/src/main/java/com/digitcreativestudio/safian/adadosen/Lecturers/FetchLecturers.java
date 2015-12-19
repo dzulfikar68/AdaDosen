@@ -3,6 +3,7 @@ package com.digitcreativestudio.safian.adadosen.Lecturers;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
     public FetchLecturers(Activity activity){
         mActivity = activity;
     }
+
 
     @Override
     protected void onPreExecute() {
@@ -119,6 +121,13 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
             lv.setSelection(position);
             notFound.setVisibility(View.GONE);
         }
+        if (mActivity != null) {
+            SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) mActivity.findViewById(R.id.swipe);
+            if(swipeLayout.isRefreshing()){
+                swipeLayout.setRefreshing(false);
+            }
+        }
+
     }
 
     public void setPosition(int position){

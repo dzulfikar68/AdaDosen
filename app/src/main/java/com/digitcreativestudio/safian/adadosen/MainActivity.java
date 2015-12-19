@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.Auth.Login;
 import com.digitcreativestudio.safian.adadosen.Auth.Logout;
@@ -32,10 +34,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     SessionManager session;
     ListView listView;
+    SwipeRefreshLayout swipeLayout;
 
     SharedPreferences sharedPreferences;
 
@@ -72,10 +76,20 @@ public class MainActivity extends AppCompatActivity {
 
         Button login = (Button) findViewById(R.id.login);
 
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                listView.removeAllViewsInLayout();
+                new FetchLecturers(MainActivity.this).execute();
+            }
+        });
+
         if(session.isLoggedIn()){
             user.setText(" " + (session.getUserDetails()).get(SessionManager.KEY_NAME));
             login.setVisibility(View.GONE);
-
+            Toast.makeText(getApplicationContext(),"Welcome, "+(session.getUserDetails()).get(SessionManager.KEY_NAME),Toast.LENGTH_LONG).show();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
@@ -177,4 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
+
 }
