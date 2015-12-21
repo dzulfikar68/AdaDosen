@@ -1,8 +1,11 @@
 package com.digitcreativestudio.safian.adadosen.Lecturers;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
+import com.digitcreativestudio.safian.adadosen.LoginActivity;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 
 import java.text.SimpleDateFormat;
@@ -24,6 +27,12 @@ public class LecturerOnChangeListener implements CompoundButton.OnCheckedChangeL
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         int id = (int) compoundButton.getTag();
+
+        if(!session.isLoggedIn()){
+            Intent intent = new Intent(mActivity, LoginActivity.class);
+            mActivity.startActivity(intent);
+            Toast.makeText(mActivity, "Anda Belum Login",Toast.LENGTH_SHORT).show();
+        }else{
         String modifiedBy = (session.getUserDetails()).get(SessionManager.KEY_ID);
         boolean status = b;
         Date lastModify = new Date();
@@ -33,6 +42,6 @@ public class LecturerOnChangeListener implements CompoundButton.OnCheckedChangeL
         sdf1.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         (new LecturerUpdate(mActivity)).execute(String.valueOf(id), String.valueOf(status), modifiedBy, sdf1.format(lastModify), String.valueOf(mPosition));
-
+        }
     }
 }
