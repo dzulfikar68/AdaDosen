@@ -2,14 +2,18 @@ package com.digitcreativestudio.safian.adadosen.Lecturers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.digitcreativestudio.safian.adadosen.LoginActivity;
+import com.digitcreativestudio.safian.adadosen.MainActivity;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.R;
 
@@ -40,7 +44,7 @@ public class LecturersAdapter extends BaseAdapter {
         return position;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         View vi = convertView;
         if (convertView == null)
             vi = inflater.inflate(R.layout.list_lecturer, null);
@@ -50,7 +54,7 @@ public class LecturersAdapter extends BaseAdapter {
         TextView nip = (TextView) vi.findViewById(R.id.nip);
         TextView lastModify = (TextView) vi.findViewById(R.id.lastModify);
         TextView modifiedBy = (TextView) vi.findViewById(R.id.modifiedBy);
-        ToggleButton status = (ToggleButton) vi.findViewById(R.id.status);
+        final ToggleButton status = (ToggleButton) vi.findViewById(R.id.status);
         LinearLayout parentLL = (LinearLayout) (name.getParent());
 
         Lecturer lecturer = mLecturers.get(position);
