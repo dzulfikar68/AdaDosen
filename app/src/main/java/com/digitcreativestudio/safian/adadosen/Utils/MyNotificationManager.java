@@ -76,7 +76,7 @@ public class MyNotificationManager extends BroadcastReceiver{
 
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(_context)
-                .setSmallIcon(R.drawable.ic_stat_name)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(_context.getString(R.string.app_name))
                 .setContentText(notifications.size() == 1 ? newLine : notifications.size()+" updates")
                 .setAutoCancel(true)
