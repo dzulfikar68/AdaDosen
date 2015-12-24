@@ -7,4 +7,19 @@
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/action_refresh"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_options"
+        android:icon="@drawable/ic_action_more_vert"
+        android:title="@string/action_options"
+        android:orderInCategory="100"
+        app:showAsAction="always" >
+        <menu>
+            <item
+                android:id="@+id/login"
+                android:title="@string/action_login"/>
+            <item
+                android:id="@+id/about"
+                android:title="@string/action_about"/>
+        </menu>
+    </item>
 </menu>

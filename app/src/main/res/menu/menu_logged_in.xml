@@ -18,6 +18,9 @@
                 android:id="@+id/action_change_password"
                 android:title="@string/action_change_password"/>
             <item
+                android:id="@+id/about"
+                android:title="@string/action_about"/>
+            <item
                 android:id="@+id/action_logout"
                 android:title="@string/action_logout"/>
         </menu>
