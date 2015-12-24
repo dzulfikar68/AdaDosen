@@ -21,7 +21,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Dr. Retno Kusumaningrum, S.Si, M.Kom"
-        android:id="@+id/name" />
+        android:id="@+id/name"
+        android:textColor="@color/black"
+        android:alpha="0.87"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -40,7 +42,9 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="198104202005012001"
-                android:id="@+id/nip" />
+                android:id="@+id/nip"
+                android:textColor="@color/black"
+                android:alpha="0.54"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -100,10 +104,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/status"
             android:checked="false"
-            android:textOn="Ada"
-            android:textOff="Tidak Ada"
+            android:textOn="ADA"
+            android:textOff="TIDAK ADA"
             android:background="@drawable/bg_red"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            />
 
     </LinearLayout>
 
