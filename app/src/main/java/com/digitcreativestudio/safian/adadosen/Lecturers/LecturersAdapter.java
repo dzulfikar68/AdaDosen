@@ -70,13 +70,15 @@ public class LecturersAdapter extends BaseAdapter {
         status.setChecked(lecturer.getStatus());
         status.setTag(lecturer.getId());
 
-        if(session.isLoggedIn()){
+        status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
+        status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
+        /*if(session.isLoggedIn()){
             status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
             status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
         }else{
             status.setEnabled(false);
             status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_guest));
-        }
+        }*/
         return vi;
     }
 

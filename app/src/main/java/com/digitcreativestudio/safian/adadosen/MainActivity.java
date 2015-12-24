@@ -66,17 +66,19 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
         notif.removeNotifications();
 
         session = new SessionManager(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.listview_lecturers);
-        TextView user = (TextView) findViewById(R.id.user);
+        /*TextView user = (TextView) findViewById(R.id.user);
 
         Button login = (Button) findViewById(R.id.login);
-
+*/
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+        swipeLayout.setColorSchemeColors(R.color.primary_color);
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -87,26 +89,26 @@ public class MainActivity extends AppCompatActivity{
         });
 
         if(session.isLoggedIn()){
-            user.setText(" " + (session.getUserDetails()).get(SessionManager.KEY_NAME));
-            login.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(),"Welcome, "+(session.getUserDetails()).get(SessionManager.KEY_NAME),Toast.LENGTH_LONG).show();
+           /* user.setText(" " + (session.getUserDetails()).get(SessionManager.KEY_NAME));
+            login.setVisibility(View.GONE);*/
+            //Toast.makeText(getApplicationContext(),"Welcome, "+(session.getUserDetails()).get(SessionManager.KEY_NAME),Toast.LENGTH_LONG).show();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
             new Login().execute(session.getUserDetails().get(SessionManager.KEY_ID), sdf.format(new Date()));
-        }else{
+        }/*else{
             user.setText(" Guest");
             login.setVisibility(View.VISIBLE);
-        }
+        }*/
 
-        login.setOnClickListener(new View.OnClickListener() {
+        /*login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(i);
             }
-        });
+        });*/
 
 
 
@@ -164,6 +166,14 @@ public class MainActivity extends AppCompatActivity{
             new FetchLecturers(MainActivity.this).execute();
         }else if(id == R.id.action_change_password){
             Intent i = new Intent(MainActivity.this, ChangePasswordActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(i);
+        }else if(id == R.id.login){
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(i);
+        }else if(id==R.id.about){
+            Intent i = new Intent(MainActivity.this, AboutActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(i);
         }

@@ -15,4 +15,7 @@
     <color name="dark_orange">#F76A10</color>
     <color name="orange">#f4b411</color>
     <color name="dcs_blue">#047EF8</color>
+    <color name="primary_color">#009688</color>
+    <color name="primary_dark">#00796b</color>
+    <color name="color_accent">#ff3d00</color>
 </resources>
