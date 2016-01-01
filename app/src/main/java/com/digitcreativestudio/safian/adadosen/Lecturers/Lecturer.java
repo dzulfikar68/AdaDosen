@@ -71,9 +71,9 @@ public class Lecturer {
     public String getModifiedBy(){
         return modifiedBy;
     }
-    public String getLastModify(){
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
-        return sdf.format(lastModify);
+    public Date getLastModify(){
+
+        return lastModify;
     }
     public int getPosition(){return position;}
 

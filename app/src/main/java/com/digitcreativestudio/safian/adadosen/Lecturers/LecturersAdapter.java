@@ -2,20 +2,18 @@ package com.digitcreativestudio.safian.adadosen.Lecturers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.digitcreativestudio.safian.adadosen.LoginActivity;
-import com.digitcreativestudio.safian.adadosen.MainActivity;
-import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.R;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 
 import java.util.ArrayList;
 
@@ -62,7 +60,7 @@ public class LecturersAdapter extends BaseAdapter {
         //id.setText(lecturer.getId());
         name.setText(lecturer.getName());
         nip.setText(lecturer.getNip());
-        lastModify.setText(lecturer.getLastModify());
+        lastModify.setText(Utils.getFriendlyDate(lecturer.getLastModify()));
         modifiedBy.setText(lecturer.getModifiedBy());
         parentLL.setId(lecturer.getId());
 
@@ -70,7 +68,9 @@ public class LecturersAdapter extends BaseAdapter {
         status.setChecked(lecturer.getStatus());
         status.setTag(lecturer.getId());
 
-        status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
+        else status.setBackgroundDrawable(mActivity.getDrawable(R.drawable.button_user));
+
         status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
         /*if(session.isLoggedIn()){
             status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
