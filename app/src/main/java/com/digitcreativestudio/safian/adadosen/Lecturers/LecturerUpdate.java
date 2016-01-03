@@ -93,6 +93,9 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
             ContentValues cv = Utils.parseJsonLecturer(update);
 
             mActivity.getContentResolver().update(DBContract.LecturerEntry.CONTENT_URI, cv, DBContract.LecturerEntry._ID + " = ?", new String[]{update.getString("id")});
+            Intent i = new Intent();
+            i.setAction(MainActivity.ACTION_REFRESH);
+            mActivity.sendBroadcast(i);
             return jObj.getString("message");
         } catch (Exception e) {
             e.printStackTrace();

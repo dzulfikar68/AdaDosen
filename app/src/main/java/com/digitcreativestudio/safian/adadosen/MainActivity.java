@@ -34,8 +34,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    public static final String ACTION_REFRESH = "com.digitcreativestudio.safian.adadosen.REFRESH";
+    BroadcastReceiver receiver;
+    IntentFilter filter;
 
     SessionManager session;
     ListView listView;
@@ -47,9 +51,15 @@ public class MainActivity extends AppCompatActivity{
 
     LecturersAdapter adapter;
     Cursor mCursor;
+
+    private static final int LECTURER_LOADER = 0;
+    private int mPosition = ListView.INVALID_POSITION;
+    private final String SELECTED_KEY = "position";
+
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        unregisterReceiver(receiver);
         super.onPause();
     }
 
@@ -58,6 +68,7 @@ public class MainActivity extends AppCompatActivity{
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(SessionManager.REGISTRATION_COMPLETE));
+        registerReceiver(receiver, filter);
         MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
         notif.removeNotifications();
     }
@@ -89,8 +100,7 @@ public class MainActivity extends AppCompatActivity{
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                listView.removeAllViewsInLayout();
-                new FetchLecturers(MainActivity.this).execute();
+                new FetchLecturers(MainActivity.this, swipeLayout).execute();
             }
         });
 
@@ -129,13 +139,28 @@ public class MainActivity extends AppCompatActivity{
             }
         };
 
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                reloadCursor();
+            }
+        };
+        filter = new IntentFilter(ACTION_REFRESH);
+
+        registerReceiver(receiver, filter);
+
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
-        new FetchLecturers(MainActivity.this).execute();
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading..");
+        pDialog.setIndeterminate(true);
+        pDialog.setCancelable(false);
         reloadCursor();
+
         Bundle args = getIntent().getExtras();
         if(args != null){
             (new LecturerUpdate(this)).execute(args.getString("id"), args.getString("status"), args.getString("modifiedBy"), args.getString("lastModify"), args.getString("position"));
@@ -190,6 +215,14 @@ public class MainActivity extends AppCompatActivity{
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);

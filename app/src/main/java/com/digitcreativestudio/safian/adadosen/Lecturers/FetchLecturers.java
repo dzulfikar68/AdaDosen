@@ -2,14 +2,20 @@ package com.digitcreativestudio.safian.adadosen.Lecturers;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.digitcreativestudio.safian.adadosen.Data.DBContract;
+import com.digitcreativestudio.safian.adadosen.MainActivity;
 import com.digitcreativestudio.safian.adadosen.R;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,32 +26,36 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by faqih_000 on 11/7/2015.
  */
 public class FetchLecturers extends AsyncTask <String, Void, String> {
-    ArrayList<Lecturer> lecturers = new ArrayList<>();
-    ProgressDialog pDialog;
+    ProgressDialog pDialog = null;
     int position = 0;
+    SwipeRefreshLayout swipeLayout = null;
 
-    Activity mActivity;
+    Activity mActivity = null;
+    Context context;
 
-    public FetchLecturers(Activity activity){
+    public FetchLecturers(Activity activity, ProgressDialog progressDialog){
         mActivity = activity;
+        pDialog = progressDialog;
     }
 
+    public FetchLecturers(Activity activity, SwipeRefreshLayout swipe){
+        mActivity = activity;
+        swipeLayout = swipe;
+    }
+
+    public FetchLecturers(Context context){
+        this.context = context;
+    }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        ListView lv = (ListView) mActivity.findViewById(R.id.listview_lecturers);
-        lv.removeAllViewsInLayout();
-        pDialog = new ProgressDialog(mActivity);
-        pDialog.setMessage("Loading..");
-        pDialog.setIndeterminate(true);
-        pDialog.setCancelable(false);
-        pDialog.show();
     }
 
     @Override
@@ -84,7 +94,10 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
                 }
                 ContentValues[] arrayCV = new ContentValues[listCV.size()];
                 listCV.toArray(arrayCV);
+                if(mActivity != null)
                     mActivity.getContentResolver().bulkInsert(DBContract.LecturerEntry.CONTENT_URI, arrayCV);
+                else context.getContentResolver().bulkInsert(DBContract.LecturerEntry.CONTENT_URI, arrayCV);
+
             }else{
                 return "no results";
             }
@@ -103,38 +116,39 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        pDialog.dismiss();
+        if(mActivity != null) {
+            if (pDialog != null)
+                if (pDialog.isShowing())
+                    pDialog.dismiss();
+            if (swipeLayout != null)
+                if (swipeLayout.isRefreshing())
+                    swipeLayout.setRefreshing(false);
 
-        ListView lv = (ListView) mActivity.findViewById(R.id.listview_lecturers);
-        TextView notFound = (TextView) mActivity.findViewById(R.id.notFound);
+            TextView notFound = (TextView) ((Activity) mActivity).findViewById(R.id.notFound);
 
-        if(result.equalsIgnoreCase("Exception Caught"))
-        {
-            Toast.makeText(mActivity, "Terjadi Kesalahan.", Toast.LENGTH_SHORT).show();
-            notFound.setVisibility(View.VISIBLE);
-        }
+            if (result.equalsIgnoreCase("Exception Caught")) {
+                Toast.makeText(mActivity, "Terjadi Kesalahan.", Toast.LENGTH_SHORT).show();
+                notFound.setVisibility(View.VISIBLE);
+            }
 
-        if(result.equalsIgnoreCase("no results"))
-        {
-            Toast.makeText(mActivity, "Data empty", Toast.LENGTH_LONG).show();
-            notFound.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            LecturersAdapter adapter = new LecturersAdapter(mActivity, lecturers);
-            lv.setAdapter(adapter); //Adapter menampilkan data mahasiswa ke dalam listView
-            lv.setSelection(position);
-            notFound.setVisibility(View.GONE);
-        }
-        if (mActivity != null) {
-            SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) mActivity.findViewById(R.id.swipe);
-            if(swipeLayout.isRefreshing()){
-                swipeLayout.setRefreshing(false);
+            if (result.equalsIgnoreCase("no results")) {
+                Toast.makeText(mActivity, "Data empty", Toast.LENGTH_LONG).show();
+                notFound.setVisibility(View.VISIBLE);
+            } else {
+                Intent i = new Intent();
+                i.setAction(MainActivity.ACTION_REFRESH);
+                mActivity.sendBroadcast(i);
+                notFound.setVisibility(View.GONE);
             }
             SessionManager session = new SessionManager(mActivity);
             session.setIsSync(true);
+        }else{
+            Intent i = new Intent();
+            i.setAction(MainActivity.ACTION_REFRESH);
+            context.sendBroadcast(i);
+            SessionManager session = new SessionManager(context);
+            session.setIsSync(true);
         }
-
     }
 
     public void setPosition(int position){
