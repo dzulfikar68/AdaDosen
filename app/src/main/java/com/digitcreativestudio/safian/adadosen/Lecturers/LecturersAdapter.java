@@ -1,53 +1,38 @@
 package com.digitcreativestudio.safian.adadosen.Lecturers;
 
-import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.digitcreativestudio.safian.adadosen.Data.DBContract.LecturerEntry;
 import com.digitcreativestudio.safian.adadosen.R;
-import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 /**
- * Created by faqih_000 on 11/7/2015.
+ * Created by faqih_000 on 1/2/2016.
  */
-public class LecturersAdapter extends BaseAdapter {
-    private Activity mActivity;
-    private SessionManager session;
-    private ArrayList<Lecturer> mLecturers;
+public class LecturersAdapter extends CursorAdapter {
 
-    private static LayoutInflater inflater = null;
-
-    public LecturersAdapter(Activity activity, ArrayList<Lecturer> lecturers) {
-        mActivity = activity; mLecturers = lecturers;
-        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        session = new SessionManager(mActivity.getApplicationContext());
-    }
-    public int getCount() {
-        return mLecturers.size();
-    }
-    public Object getItem(int position) {
-        return mLecturers.get(position);
-    }
-    public long getItemId(int position) {
-        return position;
+    public LecturersAdapter(Context context, Cursor c, int flags) {
+        super(context, c, flags);
     }
 
-    public View getView(final int position, View convertView, final ViewGroup parent) {
-        View vi = convertView;
-        if (convertView == null)
-            vi = inflater.inflate(R.layout.list_lecturer, null);
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
+        return LayoutInflater.from(context).inflate(R.layout.list_lecturer, viewGroup, false);
+    }
 
-        TextView id = (TextView) vi.findViewById(R.id.id);
+    @Override
+    public void bindView(View vi, Context context, Cursor cursor) {
         TextView name = (TextView) vi.findViewById(R.id.name);
         TextView nip = (TextView) vi.findViewById(R.id.nip);
         TextView lastModify = (TextView) vi.findViewById(R.id.lastModify);
@@ -55,34 +40,20 @@ public class LecturersAdapter extends BaseAdapter {
         final ToggleButton status = (ToggleButton) vi.findViewById(R.id.status);
         LinearLayout parentLL = (LinearLayout) (name.getParent());
 
-        Lecturer lecturer = mLecturers.get(position);
-        mLecturers.get(position).setPosition(position);
-        //id.setText(lecturer.getId());
-        name.setText(lecturer.getName());
-        nip.setText(lecturer.getNip());
-        lastModify.setText(Utils.getFriendlyDate(lecturer.getLastModify()));
-        modifiedBy.setText(lecturer.getModifiedBy());
-        parentLL.setId(lecturer.getId());
+        vi.setId(cursor.getInt(cursor.getColumnIndex(LecturerEntry._ID)));
+        name.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_NAME)));
+        nip.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_NIP)));
+        lastModify.setText(Utils.getFriendlyDate(new Date(cursor.getLong(cursor.getColumnIndex(LecturerEntry.COLUMN_LAST_MODIFY)))));
+        modifiedBy.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_MODIFIED_BY)));
 
         status.setOnCheckedChangeListener(null);
-        status.setChecked(lecturer.getStatus());
-        status.setTag(lecturer.getId());
+        status.setChecked(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_STATUS)).equals("1"));
+        status.setTag(cursor.getInt(cursor.getColumnIndex(LecturerEntry._ID)));
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
-        else status.setBackgroundDrawable(mActivity.getDrawable(R.drawable.button_user));
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)status.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.button_user));
+        else status.setBackgroundDrawable(context.getDrawable(R.drawable.button_user));
 
-        status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
-        /*if(session.isLoggedIn()){
-            status.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, position));
-            status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_user));
-        }else{
-            status.setEnabled(false);
-            status.setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.button_guest));
-        }*/
-        return vi;
+        status.setOnCheckedChangeListener(new LecturerOnChangeListener(context, cursor.getPosition()));
     }
 
-    public ArrayList<Lecturer> getLecturers(){
-        return mLecturers;
-    }
 }

@@ -88,7 +88,11 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
 
             JSONObject jObj = new JSONObject(responseString);
             success = jObj.getBoolean("success");
+            JSONObject update = jObj.getJSONObject("update");
 
+            ContentValues cv = Utils.parseJsonLecturer(update);
+
+            mActivity.getContentResolver().update(DBContract.LecturerEntry.CONTENT_URI, cv, DBContract.LecturerEntry._ID + " = ?", new String[]{update.getString("id")});
             return jObj.getString("message");
         } catch (Exception e) {
             e.printStackTrace();

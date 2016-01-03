@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity{
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     ProgressDialog pDialog;
 
+    LecturersAdapter adapter;
+    Cursor mCursor;
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        adapter = new LecturersAdapter(this, null, 0);
 
         MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
         notif.removeNotifications();
@@ -73,10 +76,14 @@ public class MainActivity extends AppCompatActivity{
         session = new SessionManager(getApplicationContext());
 
         listView = (ListView) findViewById(R.id.listview_lecturers);
-        /*TextView user = (TextView) findViewById(R.id.user);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        Button login = (Button) findViewById(R.id.login);
-*/
+            }
+        });
+
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         swipeLayout.setColorSchemeColors(R.color.primary_color);
 
@@ -137,6 +144,7 @@ public class MainActivity extends AppCompatActivity{
             startService(intent);
         }
         new FetchLecturers(MainActivity.this).execute();
+        reloadCursor();
     }
 
     @Override
@@ -202,6 +210,20 @@ public class MainActivity extends AppCompatActivity{
         return true;
     }
 
+    public void reloadCursor(){
+        if(session.isSync()) {
+            mCursor = getContentResolver().query(DBContract.LecturerEntry.CONTENT_URI, null, null, null, null);
+            if(mCursor.getCount() > 0) {
+                adapter.swapCursor(mCursor);
+                adapter.notifyDataSetChanged();
+            }else {
+                session.setIsSync(false);
+            }
+        }
 
-
+        if(!session.isSync()){
+            pDialog.show();
+            new FetchLecturers(MainActivity.this, pDialog).execute();
+        }
+    }
 }

@@ -55,6 +55,8 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
         InputStream response = null;
         String responseString = "";
 
+        List<ContentValues> listCV = new ArrayList<>();
+
         try {
             URL url = new URL("http://api.arifian.com/AdaDosen/lecturer/fetch");
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -78,8 +80,11 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
                 JSONArray jArray = jObj.getJSONArray("data");
                 for(int i = 0; i < jArray.length(); i++){
                     JSONObject lecturer = jArray.getJSONObject(i);
-                    lecturers.add(new Lecturer(lecturer));
+                    listCV.add(Utils.parseJsonLecturer(lecturer));
                 }
+                ContentValues[] arrayCV = new ContentValues[listCV.size()];
+                listCV.toArray(arrayCV);
+                    mActivity.getContentResolver().bulkInsert(DBContract.LecturerEntry.CONTENT_URI, arrayCV);
             }else{
                 return "no results";
             }
@@ -126,6 +131,8 @@ public class FetchLecturers extends AsyncTask <String, Void, String> {
             if(swipeLayout.isRefreshing()){
                 swipeLayout.setRefreshing(false);
             }
+            SessionManager session = new SessionManager(mActivity);
+            session.setIsSync(true);
         }
 
     }
