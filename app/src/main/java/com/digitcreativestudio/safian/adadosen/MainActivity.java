@@ -29,10 +29,6 @@ import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 public class MainActivity extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -70,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(receiver, filter);
         MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
         notif.removeNotifications();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -103,12 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(session.isLoggedIn()){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-            new Login().execute(session.getUserDetails().get(SessionManager.KEY_ID), sdf.format(new Date()), session.getToken());
-        }
+        if(session.isLoggedIn()){new Login().execute(session.getUserDetails().get(SessionManager.KEY_ID), session.getToken());}
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -144,8 +136,9 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
         if(args != null){
-            (new LecturerUpdate(this)).execute(args.getString("id"), args.getString("status"), args.getString("modifiedBy"), args.getString("lastModify"), args.getString("position"));
+            (new LecturerUpdate(this)).execute(args.getString("id"), args.getString("status"), args.getString("modifiedBy"), args.getString("position"));
             listView.smoothScrollToPositionFromTop(Integer.valueOf(args.getString("position"))-1, 0);
+            args = null;
         }
     }
 

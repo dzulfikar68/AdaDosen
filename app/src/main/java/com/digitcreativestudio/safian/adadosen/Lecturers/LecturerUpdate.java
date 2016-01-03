@@ -67,11 +67,10 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         String charset = "UTF-8";
 
         try {
-            String query = String.format("id=%s&status=%s&modified_by=%s&last_modify=%s&token=%s",
+            String query = String.format("id=%s&status=%s&modified_by=%s&token=%s",
                     URLEncoder.encode(id, charset),
                     URLEncoder.encode(status, charset),
                     URLEncoder.encode(modifiedBy, charset),
-                    URLEncoder.encode(lastModify, charset),
                     URLEncoder.encode(session.getToken(), charset));
 
             URL url = new URL("http://api.arifian.com/AdaDosen/lecturer/update");

@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
                         new Auth(LoginActivity.this,
                             args.getString("id"),
                             args.getString("status"),
-                            args.getString("lastModify"),
                             args.getString("position")
                         ).execute(nim, password, session.getToken());
                     }else{
