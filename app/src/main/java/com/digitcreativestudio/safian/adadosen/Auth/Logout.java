@@ -42,13 +42,11 @@ public class Logout extends AsyncTask<Void, Void, Void>{
         super.onPostExecute(aVoid);
         pDialog.dismiss();
 
-        //Toast.makeText(mActivity, "", Toast.LENGTH_SHORT);
         if(!session.isLoggedIn()){
             Intent intent = mActivity.getIntent();
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             mActivity.finish();
             mActivity.startActivity(intent);
-
         }
     }
 }

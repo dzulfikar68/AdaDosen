@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.digitcreativestudio.safian.adadosen.MainActivity;
 import com.digitcreativestudio.safian.adadosen.R;
@@ -21,45 +20,30 @@ import java.util.Set;
  */
 public class MyNotificationManager extends BroadcastReceiver{
 
-    // Shared Preferences
     SharedPreferences pref;
 
-    // Editor for Shared preferences
     SharedPreferences.Editor editor;
 
-    // Context
     Context _context;
 
-    // Shared pref mode
     int PRIVATE_MODE = 0;
     private static final int MAX_NOTIFICATION = 5;
     private static final int  NOTIFICATION_ID = 1756;
     private static final String KEY_CANCEL_NOTIFICATION = "notification_cancelled";
 
-    // Sharedpref file name
     private static final String PREF_NAME = "Notification";
 
-    // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
 
-    // User name (make variable public to access from outside)
     public static final String KEY_NOTIFICATION = "notification";
 
-    public MyNotificationManager(){
-    }
-    // Constructor
     public MyNotificationManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
 
-    /**
-     * Create login session
-     * */
     public void createNotification(String newLine){
-        // Storing login value as TRUE
-        //Set<String> notifications = pref.getStringSet(KEY_NOTIFICATION, new HashSet<String>());
         Set<String> notifications = new LinkedHashSet<>();
         notifications.add(newLine);
         notifications.addAll(pref.getStringSet(KEY_NOTIFICATION, new LinkedHashSet<String>()));
@@ -73,7 +57,6 @@ public class MyNotificationManager extends BroadcastReceiver{
 
         Intent deleteIntent = new Intent(_context, MyNotificationManager.class);
         deleteIntent.setAction(KEY_CANCEL_NOTIFICATION);
-
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(_context)
                 .setSmallIcon(R.mipmap.ic_launcher)
@@ -119,10 +102,8 @@ public class MyNotificationManager extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
         if (action.equals(KEY_CANCEL_NOTIFICATION)) {
-            Log.e("Cancel Reciever", "Broadcast received");
             SharedPreferences sp = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
             sp.edit().clear().commit();
-            Log.e("Cancel Reciever", "Successfully deleted");
         }
     }
 }

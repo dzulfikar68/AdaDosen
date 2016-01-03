@@ -5,9 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,16 +14,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.Auth.Login;
 import com.digitcreativestudio.safian.adadosen.Auth.Logout;
+import com.digitcreativestudio.safian.adadosen.Data.DBContract;
 import com.digitcreativestudio.safian.adadosen.GCM.RegistrationIntentService;
 import com.digitcreativestudio.safian.adadosen.Lecturers.FetchLecturers;
-import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
+import com.digitcreativestudio.safian.adadosen.Lecturers.LecturerUpdate;
+import com.digitcreativestudio.safian.adadosen.Lecturers.LecturersAdapter;
 import com.digitcreativestudio.safian.adadosen.Utils.MyNotificationManager;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.google.android.gms.common.ConnectionResult;
@@ -105,28 +104,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if(session.isLoggedIn()){
-           /* user.setText(" " + (session.getUserDetails()).get(SessionManager.KEY_NAME));
-            login.setVisibility(View.GONE);*/
-            //Toast.makeText(getApplicationContext(),"Welcome, "+(session.getUserDetails()).get(SessionManager.KEY_NAME),Toast.LENGTH_LONG).show();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-            new Login().execute(session.getUserDetails().get(SessionManager.KEY_ID), sdf.format(new Date()));
-        }/*else{
-            user.setText(" Guest");
-            login.setVisibility(View.VISIBLE);
-        }*/
-
-        /*login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(i);
-            }
-        });*/
-
-
+            new Login().execute(session.getUserDetails().get(SessionManager.KEY_ID), sdf.format(new Date()), session.getToken());
+        }
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -150,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(receiver, filter);
 
         if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
@@ -170,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         if(session.isLoggedIn()){
             getMenuInflater().inflate(R.menu.menu_logged_in, menu);
         }else{
@@ -181,18 +161,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             new Logout(MainActivity.this).execute();
             return true;
-        }else if(id == R.id.action_refresh){
-            listView.removeAllViewsInLayout();
-            new FetchLecturers(MainActivity.this).execute();
         }else if(id == R.id.action_change_password){
             Intent i = new Intent(MainActivity.this, ChangePasswordActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);

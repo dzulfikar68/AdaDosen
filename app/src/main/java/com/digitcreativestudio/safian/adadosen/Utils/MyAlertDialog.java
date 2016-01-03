@@ -25,13 +25,10 @@ public class MyAlertDialog {
     private void createDialog(){
         AlertDialog alertDialog = new AlertDialog.Builder(mActivity).create();
 
-        // Setting Dialog Title
         alertDialog.setTitle(mTitle);
 
-        // Setting Dialog Message
         alertDialog.setMessage(mMessage);
 
-        // Setting OK Button
         alertDialog.setButton(mButton, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (!mButton.equals("OK")) {
@@ -43,7 +40,6 @@ public class MyAlertDialog {
             }
         });
 
-        // Showing Alert Message
         alertDialog.show();
     }
 }

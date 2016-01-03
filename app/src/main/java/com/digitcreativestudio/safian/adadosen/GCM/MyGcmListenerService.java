@@ -16,25 +16,26 @@
 
 package com.digitcreativestudio.safian.adadosen.GCM;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.digitcreativestudio.safian.adadosen.Data.DBContract;
+import com.digitcreativestudio.safian.adadosen.Lecturers.FetchLecturers;
+import com.digitcreativestudio.safian.adadosen.MainActivity;
 import com.digitcreativestudio.safian.adadosen.Utils.MyNotificationManager;
+import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 import com.google.android.gms.gcm.GcmListenerService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
     private static int NOTIFICATION_ID = 1756;
 
-    /**
-     * Called when message is received.
-     *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
-     */
-    // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
@@ -46,61 +47,9 @@ public class MyGcmListenerService extends GcmListenerService {
         } else {
             // normal downstream message.
         }
-
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
-         */
         sendNotification(message);
-        // [END_EXCLUDE]
     }
-    // [END receive_message]
-
-    /**
-     * Create and show a simple notification containing the received GCM message.
-     *
-     * @param message GCM message received.
-     */
     private void sendNotification(String message) {
-
-        /*Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle(getApplicationContext().getString(R.string.app_name))
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setGroup("AdaDosen")
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());*/
-
-        /*Notification notif = new NotificationCompat.Builder(this)
-                .setContentTitle(getApplicationContext().getString(R.string.app_name))
-                .setContentText(message)
-                .setSmallIcon(R.drawable.ic_action_refresh)
-                .setGroup("AdaDosen")
-                .build();
-
-// Issue the notification
-        NotificationManagerCompat notificationManager =
-                NotificationManagerCompat.from(this);
-        notificationManager.notify(NOTIFICATION_ID, notif);*/
         try {
             Log.e("notification", message);
 

@@ -42,27 +42,6 @@ public class Utils {
         }else{
             result = "Baru saja";
         }
-//
-//        Calendar message = Calendar.getInstance();
-//        message.setTimeInMillis(date.getTime());
-//        Calendar now = Calendar.getInstance();
-//
-//        if(message.get(Calendar.YEAR) != now.get(Calendar.YEAR)){
-//
-//        }else if((message.get(Calendar.MONTH) != now.get(Calendar.MONTH)) || (message.get(Calendar.DAY_OF_MONTH) != now.get(Calendar.DAY_OF_MONTH))){
-//            int diff = (now.get(Calendar.DAY_OF_MONTH) - message.get(Calendar.DAY_OF_MONTH));
-//
-//        }else if(message.get(Calendar.HOUR_OF_DAY) != now.get(Calendar.HOUR_OF_DAY)){
-//            result = (now.get(Calendar.HOUR_OF_DAY) - message.get(Calendar.HOUR_OF_DAY))+" jam yang lalu";
-//        }else if(message.get(Calendar.MINUTE) != now.get(Calendar.MINUTE)){
-//            result = (now.get(Calendar.MINUTE) - message.get(Calendar.MINUTE))+" menit yang lalu";
-//        }else if(message.get(Calendar.SECOND) != now.get(Calendar.SECOND)){
-//            int diff = (now.get(Calendar.SECOND) - message.get(Calendar.SECOND));
-//            if(diff <= 0) result = "Baru saja";
-//            else result = diff+" detik yang lalu";
-//        }else{
-//            result = "Baru saja";
-//        }
 
         return result;
     }

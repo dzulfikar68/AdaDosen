@@ -26,8 +26,7 @@ import android.net.Uri;
 import com.digitcreativestudio.safian.adadosen.Data.DBContract.LecturerEntry;
 
 public class DBProvider extends ContentProvider {
-    private final String LOG_TAG = DBProvider.class.getSimpleName();
-    // The URI Matcher used by this content provider.
+
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DBHelper mOpenHelper;
 
@@ -48,10 +47,10 @@ public class DBProvider extends ContentProvider {
 
         return matcher;
     }
+
     @Override
     public String getType(Uri uri) {
 
-        // Use the Uri Matcher to determine what kind of URI this is.
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
@@ -65,8 +64,7 @@ public class DBProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] columns, String selection, String[] selectionArgs,
                         String sortOrder) {
-        // Here's the switch statement that, given a URI, will determine what kind of request it is,
-        // and query the database accordingly.
+
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             case LECTURER:
@@ -82,9 +80,6 @@ public class DBProvider extends ContentProvider {
         return retCursor;
     }
 
-    /*
-        Student: Add the ability to insert Locations to the implementation of this function.
-     */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -111,10 +106,10 @@ public class DBProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Student: Start by getting a writable database
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
+
         switch (match) {
             case LECTURER:
                 rowsDeleted = db.delete(LecturerEntry.TABLE_NAME, selection, selectionArgs);
@@ -122,7 +117,7 @@ public class DBProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        // Because a null deletes all rows
+
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -168,7 +163,6 @@ public class DBProvider extends ContentProvider {
                         if (_id > 0) {
                             returnCount++;
                         }
-
                     }
                     db.setTransactionSuccessful();
                 } finally {
@@ -183,9 +177,6 @@ public class DBProvider extends ContentProvider {
         }
     }
 
-    // You do not need to call this method. This is a method specifically to assist the testing
-    // framework in running smoothly. You can read more at:
-    // http://developer.android.com/reference/android/content/ContentProvider.html#shutdown()
     @Override
     @TargetApi(11)
     public void shutdown() {

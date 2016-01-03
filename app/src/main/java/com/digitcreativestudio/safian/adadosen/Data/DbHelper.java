@@ -26,7 +26,6 @@ import com.digitcreativestudio.safian.adadosen.Data.DBContract.*;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1;
 
     static final String DATABASE_NAME = "adadosen.db";
@@ -37,8 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-
         final String SQL_CREATE_LECTURERS_TABLE = "CREATE TABLE " + LecturerEntry.TABLE_NAME + " (" +
 
                 LecturerEntry._ID + " INTEGER PRIMARY KEY," +
@@ -54,7 +51,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + LecturerEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }

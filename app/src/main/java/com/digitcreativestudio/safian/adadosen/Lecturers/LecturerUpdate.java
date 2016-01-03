@@ -2,13 +2,20 @@ package com.digitcreativestudio.safian.adadosen.Lecturers;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Data.DBContract;
+import com.digitcreativestudio.safian.adadosen.MainActivity;
 import com.digitcreativestudio.safian.adadosen.R;
+import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
+import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 
 import org.json.JSONObject;
 
@@ -47,8 +54,12 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        id = params[0]; status = params[1].equals("true") ? "1" : "0"; modifiedBy = params[2]; lastModify = params[3]; position = params[4];
-        //Log.e("Updated", id + " By: " + modifiedBy + " At: " + lastModify + " To: " + status);
+        id = params[0];
+        status = params[1].equals("true") ? "1" : "0";
+        modifiedBy = params[2];
+        lastModify = params[3];
+        position = params[4];
+
         String responseString = "";
         InputStream response = null;
         int timeout=10000; //in milisecond = 10 detik
@@ -85,7 +96,6 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
             }
 
             responseString = sb.toString();
-
             JSONObject jObj = new JSONObject(responseString);
             success = jObj.getBoolean("success");
             JSONObject update = jObj.getJSONObject("update");
@@ -104,8 +114,6 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         } finally{
             urlConnection.disconnect();
         }
-
-
     }
 
     @Override
