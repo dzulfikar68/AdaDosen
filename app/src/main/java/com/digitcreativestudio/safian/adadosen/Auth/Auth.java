@@ -22,7 +22,7 @@ import java.net.URLEncoder;
 
 public class Auth extends AsyncTask<String, Void, String> {
     Activity mActivity;
-    private String id = null, status = null, position = null, modifiedBy = null;
+    private String id = null, status = null, position = null, comment = null;
 
     ProgressDialog pDialog;
 
@@ -34,11 +34,12 @@ public class Auth extends AsyncTask<String, Void, String> {
         mActivity = activity;
     }
 
-    public Auth(Activity activity, String id, String status, String position){
+    public Auth(Activity activity, String id, String status, String position, String comment){
         mActivity = activity;
         this.id = id;
         this.status = status;
         this.position = position;
+        this.comment = comment;
     }
 
     @Override
@@ -131,6 +132,7 @@ public class Auth extends AsyncTask<String, Void, String> {
                         i.putExtra("status", status);
                         i.putExtra("modifiedBy", session.getUserDetails().get(SessionManager.KEY_ID));
                         i.putExtra("position", position);
+                        i.putExtra("comment", comment);
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         mActivity.startActivity(i);
                     }else{

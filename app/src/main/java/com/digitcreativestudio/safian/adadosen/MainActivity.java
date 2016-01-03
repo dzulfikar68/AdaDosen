@@ -1,11 +1,15 @@
 package com.digitcreativestudio.safian.adadosen;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -74,7 +79,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new LecturersAdapter(this, null, 0);
+        Dialog commentDialog = new Dialog(this);
+        commentDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        commentDialog.setContentView(commentDialog.getLayoutInflater().inflate(R.layout.comment_dialog, null));
+        commentDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        commentDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        adapter = new LecturersAdapter(this, null, 0, commentDialog);
 
         MyNotificationManager notif = new MyNotificationManager(getApplicationContext());
         notif.removeNotifications();
@@ -136,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle args = getIntent().getExtras();
         if(args != null){
-            (new LecturerUpdate(this)).execute(args.getString("id"), args.getString("status"), args.getString("modifiedBy"), args.getString("position"));
+            (new LecturerUpdate(this, commentDialog)).execute(args.getString("id"), args.getString("status"), args.getString("modifiedBy"), args.getString("position"), args.getString("comment"));
             listView.smoothScrollToPositionFromTop(Integer.valueOf(args.getString("position"))-1, 0);
             args = null;
         }

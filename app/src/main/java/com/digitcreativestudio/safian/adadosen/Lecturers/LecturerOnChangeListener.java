@@ -1,51 +1,40 @@
 package com.digitcreativestudio.safian.adadosen.Lecturers;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Toast;
+import android.widget.EditText;
 
-import com.digitcreativestudio.safian.adadosen.LoginActivity;
+import com.digitcreativestudio.safian.adadosen.R;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 
 /**
  * Created by faqih_000 on 11/7/2015.
  */
 public class LecturerOnChangeListener implements CompoundButton.OnCheckedChangeListener {
-    private Context mActivity;
+    private Context context;
     SessionManager session;
     private int mPosition;
+    Dialog commentDialog;
 
-    public LecturerOnChangeListener(Context activity, int position){
-        mActivity = activity; mPosition = position;
-        session = new SessionManager(mActivity.getApplicationContext());
+    public LecturerOnChangeListener(Context context, int position, Dialog dialog){
+        this.context = context; mPosition = position; commentDialog = dialog;
+        session = new SessionManager(context.getApplicationContext());
     }
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        int id = (int) compoundButton.getTag();
-        String modifiedBy = (session.getUserDetails()).get(SessionManager.KEY_ID);
-        boolean status = b;
-        Date lastModify = new Date();
-
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        sdf1.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-
-        if(!session.isLoggedIn()){
-            Intent intent = new Intent(mActivity, LoginActivity.class);
-            intent.putExtra("id", String.valueOf(id));
-            intent.putExtra("status", String.valueOf(status));
-            intent.putExtra("lastModify", sdf1.format(lastModify));
-            intent.putExtra("position", String.valueOf(mPosition));
-            mActivity.startActivity(intent);
-            Toast.makeText(mActivity, "Anda Belum Login",Toast.LENGTH_SHORT).show();
-        }else{
-            (new LecturerUpdate(mActivity)).execute(String.valueOf(id), String.valueOf(status), modifiedBy, sdf1.format(lastModify), String.valueOf(mPosition));
-        }
+        final int id = (int) compoundButton.getTag();
+        final boolean status = b;
+        commentDialog.show();
+        commentDialog.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                commentDialog.dismiss();
+                Utils.checkLecturerUpdate(context, String.valueOf(id), String.valueOf(status), String.valueOf(mPosition), ((EditText) commentDialog.findViewById(R.id.comment)).getText().toString(), commentDialog);
+                ((EditText)commentDialog.findViewById(R.id.comment)).setText("");
+            }
+        });
     }
 }

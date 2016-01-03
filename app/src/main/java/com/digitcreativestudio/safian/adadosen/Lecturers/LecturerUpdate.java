@@ -1,12 +1,12 @@
 package com.digitcreativestudio.safian.adadosen.Lecturers;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -33,13 +33,15 @@ import java.net.URLEncoder;
 public class LecturerUpdate extends AsyncTask<String, Void, String> {
     private Context mActivity;
     private ProgressDialog pDialog;
-    private String id, status, modifiedBy, lastModify, position;
+    private String id, status, modifiedBy, position;
     private boolean success = false;
     private SessionManager session;
+    private Dialog commentDialog;
 
-    public LecturerUpdate(Context activity){
+    public LecturerUpdate(Context activity, Dialog commentDialog){
         mActivity = activity;
         session = new SessionManager(mActivity.getApplicationContext());
+        this.commentDialog = commentDialog;
     }
 
     @Override
@@ -57,8 +59,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         id = params[0];
         status = params[1].equals("true") ? "1" : "0";
         modifiedBy = params[2];
-        lastModify = params[3];
-        position = params[4];
+        position = params[3];
 
         String responseString = "";
         InputStream response = null;
@@ -67,11 +68,12 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         String charset = "UTF-8";
 
         try {
-            String query = String.format("id=%s&status=%s&modified_by=%s&token=%s",
+            String query = String.format("id=%s&status=%s&modified_by=%s&token=%s&comment=%s",
                     URLEncoder.encode(id, charset),
                     URLEncoder.encode(status, charset),
                     URLEncoder.encode(modifiedBy, charset),
-                    URLEncoder.encode(session.getToken(), charset));
+                    URLEncoder.encode(session.getToken(), charset),
+                    URLEncoder.encode(params[4], charset));
 
             URL url = new URL("http://api.arifian.com/AdaDosen/lecturer/update");
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -131,6 +133,6 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         statusBtn.setOnCheckedChangeListener(null);
         if(!success) statusBtn.setChecked(!status.equals("1"));
         else statusBtn.setChecked(status.equals("1"));
-        statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position)));
+        statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position), commentDialog));
     }
 }

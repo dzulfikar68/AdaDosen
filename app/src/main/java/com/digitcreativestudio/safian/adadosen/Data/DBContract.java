@@ -65,6 +65,7 @@ public class DBContract {
         public static final String COLUMN_NIP = "nip";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_STATUS = "status";
+        public static final String COLUMN_COMMENT = "comment";
         public static final String COLUMN_MODIFIED_BY = "modified_by";
         public static final String COLUMN_LAST_MODIFY = "last_modify";
 

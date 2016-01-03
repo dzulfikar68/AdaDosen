@@ -1,8 +1,14 @@
 package com.digitcreativestudio.safian.adadosen.Utils;
 
+import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.Data.DBContract;
+import com.digitcreativestudio.safian.adadosen.Lecturers.LecturerUpdate;
+import com.digitcreativestudio.safian.adadosen.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +16,6 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by faqih_000 on 1/1/2016.
@@ -64,12 +69,12 @@ public class Utils {
         ContentValues cv = new ContentValues();
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
             cv.put(DBContract.LecturerEntry._ID, jsonLecturer.getInt("id"));
             cv.put(DBContract.LecturerEntry.COLUMN_NIP, jsonLecturer.getString("nip"));
             cv.put(DBContract.LecturerEntry.COLUMN_NAME, jsonLecturer.getString("name"));
             cv.put(DBContract.LecturerEntry.COLUMN_STATUS, jsonLecturer.getString("status").equals("1"));
+            cv.put(DBContract.LecturerEntry.COLUMN_COMMENT, jsonLecturer.getString("comment"));
             cv.put(DBContract.LecturerEntry.COLUMN_LAST_MODIFY, sdf.parse(jsonLecturer.getString("last_modify")).getTime());
             cv.put(DBContract.LecturerEntry.COLUMN_MODIFIED_BY, shortenName(jsonLecturer.getString("modified_by")));
         }catch (JSONException je){
@@ -78,5 +83,23 @@ public class Utils {
             pe.printStackTrace();
         }
         return cv;
+    }
+
+    public static void checkLecturerUpdate(Context mActivity, String id, String status, String position, String comment, Dialog commentDialog){
+        Date lastModify = new Date();
+
+        SessionManager session = new SessionManager(mActivity.getApplicationContext());
+
+        if(!session.isLoggedIn()){
+            Intent intent = new Intent(mActivity, LoginActivity.class);
+            intent.putExtra("id", id);
+            intent.putExtra("status", status);
+            intent.putExtra("position", position);
+            intent.putExtra("comment", comment);
+            mActivity.startActivity(intent);
+            Toast.makeText(mActivity, "Anda Belum Login", Toast.LENGTH_SHORT).show();
+        }else{
+            (new LecturerUpdate(mActivity, commentDialog)).execute(id, status, (session.getUserDetails()).get(SessionManager.KEY_ID), position);
+        }
     }
 }

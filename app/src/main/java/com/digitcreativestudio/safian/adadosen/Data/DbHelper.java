@@ -43,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 LecturerEntry.COLUMN_NIP +" TEXT, "+
                 LecturerEntry.COLUMN_NAME +" TEXT, "+
                 LecturerEntry.COLUMN_STATUS +" NUMERING, "+
+                LecturerEntry.COLUMN_COMMENT +" TEXT, "+
                 LecturerEntry.COLUMN_MODIFIED_BY +" TEXT, "+
                 LecturerEntry.COLUMN_LAST_MODIFY +" NUMERING, "+
                 " UNIQUE (" + LecturerEntry._ID + ") ON CONFLICT REPLACE);";
