@@ -63,7 +63,9 @@ public class DBContract {
         public static final String TABLE_NAME = PATH_LECTURER;
 
         public static final String COLUMN_NIP = "nip";
+        public static final String COLUMN_TITLE_PREFIX = "title_prefix";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_TITLE_SUFFIX = "title_suffix";
         public static final String COLUMN_STATUS = "status";
         public static final String COLUMN_COMMENT = "comment";
         public static final String COLUMN_MODIFIED_BY = "modified_by";

@@ -41,7 +41,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 LecturerEntry._ID + " INTEGER PRIMARY KEY," +
 
                 LecturerEntry.COLUMN_NIP +" TEXT, "+
+                LecturerEntry.COLUMN_TITLE_PREFIX +" TEXT, "+
                 LecturerEntry.COLUMN_NAME +" TEXT, "+
+                LecturerEntry.COLUMN_TITLE_SUFFIX +" TEXT, "+
                 LecturerEntry.COLUMN_STATUS +" NUMERING, "+
                 LecturerEntry.COLUMN_COMMENT +" TEXT, "+
                 LecturerEntry.COLUMN_MODIFIED_BY +" TEXT, "+

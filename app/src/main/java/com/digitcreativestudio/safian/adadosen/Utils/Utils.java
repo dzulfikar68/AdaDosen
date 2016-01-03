@@ -72,7 +72,9 @@ public class Utils {
 
             cv.put(DBContract.LecturerEntry._ID, jsonLecturer.getInt("id"));
             cv.put(DBContract.LecturerEntry.COLUMN_NIP, jsonLecturer.getString("nip"));
+            cv.put(DBContract.LecturerEntry.COLUMN_TITLE_PREFIX, jsonLecturer.getString("title_prefix"));
             cv.put(DBContract.LecturerEntry.COLUMN_NAME, jsonLecturer.getString("name"));
+            cv.put(DBContract.LecturerEntry.COLUMN_TITLE_SUFFIX, jsonLecturer.getString("title_suffix"));
             cv.put(DBContract.LecturerEntry.COLUMN_STATUS, jsonLecturer.getString("status").equals("1"));
             cv.put(DBContract.LecturerEntry.COLUMN_COMMENT, jsonLecturer.getString("comment"));
             cv.put(DBContract.LecturerEntry.COLUMN_LAST_MODIFY, sdf.parse(jsonLecturer.getString("last_modify")).getTime());
@@ -86,8 +88,6 @@ public class Utils {
     }
 
     public static void checkLecturerUpdate(Context mActivity, String id, String status, String position, String comment, Dialog commentDialog){
-        Date lastModify = new Date();
-
         SessionManager session = new SessionManager(mActivity.getApplicationContext());
 
         if(!session.isLoggedIn()){
@@ -99,7 +99,7 @@ public class Utils {
             mActivity.startActivity(intent);
             Toast.makeText(mActivity, "Anda Belum Login", Toast.LENGTH_SHORT).show();
         }else{
-            (new LecturerUpdate(mActivity, commentDialog)).execute(id, status, (session.getUserDetails()).get(SessionManager.KEY_ID), position);
+            (new LecturerUpdate(mActivity, commentDialog)).execute(id, status, (session.getUserDetails()).get(SessionManager.KEY_ID), position, comment);
         }
     }
 }

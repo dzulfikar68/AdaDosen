@@ -51,14 +51,18 @@ public class LecturersAdapter extends CursorAdapter {
         final boolean statusToggle = cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_STATUS)).equals("1");
         final int position = cursor.getPosition();
 
+        String nameTxt = cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_TITLE_PREFIX)) +" "
+                +cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_NAME))+", "
+                +cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_TITLE_SUFFIX));
         vi.setId(id);
-        name.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_NAME)));
+        name.setText(nameTxt.trim());
         nip.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_NIP)));
         lastModify.setText(Utils.getFriendlyDate(new Date(cursor.getLong(cursor.getColumnIndex(LecturerEntry.COLUMN_LAST_MODIFY)))));
         modifiedBy.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_MODIFIED_BY)));
 
         if(!cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_COMMENT)).equals("")){
             comment.setText(cursor.getString(cursor.getColumnIndex(LecturerEntry.COLUMN_COMMENT)));
+            ((View) comment.getParent()).setVisibility(View.VISIBLE);
         }else{
             ((View) comment.getParent()).setVisibility(View.GONE);
         }

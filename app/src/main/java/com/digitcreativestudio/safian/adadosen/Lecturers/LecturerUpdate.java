@@ -1,19 +1,15 @@
 package com.digitcreativestudio.safian.adadosen.Lecturers;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.digitcreativestudio.safian.adadosen.Data.DBContract;
 import com.digitcreativestudio.safian.adadosen.MainActivity;
-import com.digitcreativestudio.safian.adadosen.R;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 import com.digitcreativestudio.safian.adadosen.Utils.Utils;
 
@@ -104,9 +100,7 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
             ContentValues cv = Utils.parseJsonLecturer(update);
 
             mActivity.getContentResolver().update(DBContract.LecturerEntry.CONTENT_URI, cv, DBContract.LecturerEntry._ID + " = ?", new String[]{update.getString("id")});
-            Intent i = new Intent();
-            i.setAction(MainActivity.ACTION_REFRESH);
-            mActivity.sendBroadcast(i);
+
             return jObj.getString("message");
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,12 +121,16 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         }
         Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
 
-        LinearLayout parent = (LinearLayout) ((Activity) mActivity).findViewById(Integer.valueOf(id));
-        ToggleButton statusBtn = (ToggleButton) parent.findViewById(R.id.status);
+        Intent i = new Intent();
+        i.setAction(MainActivity.ACTION_REFRESH);
+        mActivity.sendBroadcast(i);
 
-        statusBtn.setOnCheckedChangeListener(null);
-        if(!success) statusBtn.setChecked(!status.equals("1"));
-        else statusBtn.setChecked(status.equals("1"));
-        statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position), commentDialog));
+//        LinearLayout parent = (LinearLayout) ((Activity) mActivity).findViewById(Integer.valueOf(id));
+//        ToggleButton statusBtn = (ToggleButton) parent.findViewById(R.id.status);
+//
+//        statusBtn.setOnCheckedChangeListener(null);
+//        if(!success) statusBtn.setChecked(!status.equals("1"));
+//        else statusBtn.setChecked(status.equals("1"));
+//        statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position), commentDialog));
     }
 }

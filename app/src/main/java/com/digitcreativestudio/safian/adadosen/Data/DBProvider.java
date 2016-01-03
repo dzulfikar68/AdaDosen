@@ -69,7 +69,14 @@ public class DBProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case LECTURER:
             {
-                retCursor = mOpenHelper.getReadableDatabase().query(LecturerEntry.TABLE_NAME, null, null, null, null, null, null);
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        LecturerEntry.TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        LecturerEntry.COLUMN_NAME+" ASC");
                 break;
             }
 
