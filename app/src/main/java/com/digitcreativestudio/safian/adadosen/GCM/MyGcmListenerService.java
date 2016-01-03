@@ -70,8 +70,6 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-        MyNotificationManager notif = new MyNotificationManager(this.getApplicationContext());
-        notif.createNotification(message);
 
         /*Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -103,5 +101,29 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(this);
         notificationManager.notify(NOTIFICATION_ID, notif);*/
+        try {
+            Log.e("notification", message);
+
+            JSONObject jObj = new JSONObject(message);
+
+            if(!jObj.getString("data").equals("")) {
+                JSONObject data = jObj.getJSONObject("data");
+                ContentValues cv = Utils.parseJsonLecturer(data);
+
+                this.getContentResolver().update(DBContract.LecturerEntry.CONTENT_URI, cv, DBContract.LecturerEntry._ID + " = ?", new String[]{data.getString("id")});
+            }
+            if(!jObj.getString("message").equals("update")) {
+                MyNotificationManager notif = new MyNotificationManager(this.getApplicationContext());
+                notif.createNotification(jObj.getString("message"));
+
+                Intent i = new Intent();
+                i.setAction(MainActivity.ACTION_REFRESH);
+                sendBroadcast(i);
+            }else{
+                new FetchLecturers(this).execute();
+            }
+        }catch(JSONException je){
+            je.printStackTrace();
+        }
     }
 }
