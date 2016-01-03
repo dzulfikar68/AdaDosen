@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.digitcreativestudio.safian.adadosen.MainActivity;
-import com.digitcreativestudio.safian.adadosen.Utils.MyAlertDialog;
 import com.digitcreativestudio.safian.adadosen.Utils.SessionManager;
 
 import org.json.JSONObject;
@@ -23,6 +22,7 @@ import java.net.URLEncoder;
 
 public class Auth extends AsyncTask<String, Void, String> {
     Activity mActivity;
+    private String id = null, status = null, lastModify = null, position = null, modifiedBy = null;
 
     ProgressDialog pDialog;
 
@@ -32,6 +32,14 @@ public class Auth extends AsyncTask<String, Void, String> {
 
     public Auth(Activity activity){
         mActivity = activity;
+    }
+
+    public Auth(Activity activity, String id, String status, String lastModify, String position){
+        mActivity = activity;
+        this.id = id;
+        this.status = status;
+        this.lastModify = lastModify;
+        this.position = position;
     }
 
     @Override
@@ -84,9 +92,10 @@ public class Auth extends AsyncTask<String, Void, String> {
             responseString = sb.toString();
 
             JSONObject jObj = new JSONObject(responseString);
-            String id = jObj.getString(SessionManager.KEY_ID);
+
             success = jObj.getBoolean("success");
             if(success){
+                String id = jObj.getString(SessionManager.KEY_ID);
                 String nim = jObj.getString(SessionManager.KEY_NIM);
                 String name = jObj.getString(SessionManager.KEY_NAME);
 
@@ -113,15 +122,25 @@ public class Auth extends AsyncTask<String, Void, String> {
         {
             Toast.makeText(mActivity, "Connection timeout.", Toast.LENGTH_SHORT).show();
         }else{
+            Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
             if(success){
-                Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
+
                 if(session.isLoggedIn()){
-                    Intent i = new Intent(mActivity, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    mActivity.startActivity(i);
+                    if(id != null) {
+                        Intent i = new Intent(mActivity, MainActivity.class);
+                        i.putExtra("id", id);
+                        i.putExtra("status", status);
+                        i.putExtra("modifiedBy", session.getUserDetails().get(SessionManager.KEY_ID));
+                        i.putExtra("lastModify", lastModify);
+                        i.putExtra("position", position);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mActivity.startActivity(i);
+                    }else{
+                        Intent i = new Intent(mActivity, MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mActivity.startActivity(i);
+                    }
                 }
-            }else{
-                new MyAlertDialog(mActivity, "Login gagal", s);
             }
         }
 

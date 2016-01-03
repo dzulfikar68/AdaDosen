@@ -24,13 +24,13 @@ import java.net.URLEncoder;
  * Created by faqih_000 on 11/7/2015.
  */
 public class LecturerUpdate extends AsyncTask<String, Void, String> {
-    private Activity mActivity;
+    private Context mActivity;
     private ProgressDialog pDialog;
     private String id, status, modifiedBy, lastModify, position;
     private boolean success = false;
     private SessionManager session;
 
-    public LecturerUpdate(Activity activity){
+    public LecturerUpdate(Context activity){
         mActivity = activity;
         session = new SessionManager(mActivity.getApplicationContext());
     }
@@ -115,43 +115,12 @@ public class LecturerUpdate extends AsyncTask<String, Void, String> {
         }
         Toast.makeText(mActivity, s, Toast.LENGTH_SHORT).show();
 
-        LinearLayout parent = (LinearLayout) mActivity.findViewById(Integer.valueOf(id));
+        LinearLayout parent = (LinearLayout) ((Activity) mActivity).findViewById(Integer.valueOf(id));
         ToggleButton statusBtn = (ToggleButton) parent.findViewById(R.id.status);
-        if(success){
-            try{
-               /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                SimpleDateFormat sdf2nd = new SimpleDateFormat("HH:mm dd-MM-yyyy");
-                sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-                lastModify = sdf2nd.format(sdf.parse(lastModify));
 
-                ((TextView) parent.findViewById(R.id.lastModify)).setText(lastModify);
-                ((TextView) parent.findViewById(R.id.modifiedBy)).setText((session.getUserDetails()).get(SessionManager.KEY_NAME));
-
-                ListView lv = (ListView) mActivity.findViewById(R.id.listview_lecturers);
-                LecturersAdapter adapter = (LecturersAdapter) lv.getAdapter();
-                ArrayList<Lecturer> lecturers = adapter.getLecturers();
-                Lecturer lecturer = lecturers.get(Integer.valueOf(position));
-                lecturer.setStatus(status.equals("true"));
-                lecturer.setModifiedBy((session.getUserDetails()).get(SessionManager.KEY_NAME));
-                lecturer.setLastModify(lastModify);
-
-                lecturers.set(lecturer.getPosition(), lecturer);
-
-                lv.setAdapter(null);
-                lv.setAdapter(new LecturersAdapter(mActivity, lecturers));*/
-                FetchLecturers fl = new FetchLecturers(mActivity);
-                fl.setPosition(Integer.valueOf(position));
-                fl.execute();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-        }else{
-            statusBtn.setOnCheckedChangeListener(null);
-            statusBtn.setChecked(!status.equals("1"));
-            statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position)));
-        }
-
-
+        statusBtn.setOnCheckedChangeListener(null);
+        if(!success) statusBtn.setChecked(!status.equals("1"));
+        else statusBtn.setChecked(status.equals("1"));
+        statusBtn.setOnCheckedChangeListener(new LecturerOnChangeListener(mActivity, Integer.valueOf(position)));
     }
 }

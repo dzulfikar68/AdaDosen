@@ -136,6 +136,11 @@ public class MainActivity extends AppCompatActivity{
         }
         new FetchLecturers(MainActivity.this).execute();
         reloadCursor();
+        Bundle args = getIntent().getExtras();
+        if(args != null){
+            (new LecturerUpdate(this)).execute(args.getString("id"), args.getString("status"), args.getString("modifiedBy"), args.getString("lastModify"), args.getString("position"));
+            listView.smoothScrollToPositionFromTop(Integer.valueOf(args.getString("position"))-1, 0);
+        }
     }
 
     @Override
