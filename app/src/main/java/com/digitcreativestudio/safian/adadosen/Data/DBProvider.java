@@ -25,8 +25,8 @@ import android.net.Uri;
 
 import com.digitcreativestudio.safian.adadosen.Data.DBContract.LecturerEntry;
 
-public class ScoreProvider extends ContentProvider {
-    private final String LOG_TAG = ScoreProvider.class.getSimpleName();
+public class DBProvider extends ContentProvider {
+    private final String LOG_TAG = DBProvider.class.getSimpleName();
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DBHelper mOpenHelper;
@@ -157,6 +157,7 @@ public class ScoreProvider extends ContentProvider {
         switch (match) {
             case LECTURER: {
                 db.beginTransaction();
+                delete(uri, null, null);
                 int returnCount = 0;
                 try {
                     long _id = -1;
