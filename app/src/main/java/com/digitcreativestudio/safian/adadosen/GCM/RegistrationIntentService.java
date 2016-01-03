@@ -44,7 +44,7 @@ public class RegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
-
+    SessionManager session;
 
     public RegistrationIntentService() {
         super(TAG);
@@ -52,7 +52,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        session = new SessionManager(this);
         try {
             // [START register_for_gcm]
             // Initially this call goes out to the network to retrieve the token, subsequent calls
@@ -68,8 +68,8 @@ public class RegistrationIntentService extends IntentService {
 
             // TODO: Implement this method to send any registration to your app's servers.
             boolean registered = sharedPreferences.getBoolean(SessionManager.SENT_TOKEN_TO_SERVER, false);
-            if(!registered){
-                registered = sendRegistrationToServer(token);
+            if(!session.isTokenSent()){
+                sendRegistrationToServer(token);
             }
 
             // Subscribe to topic channels
@@ -79,7 +79,6 @@ public class RegistrationIntentService extends IntentService {
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
 
-            sharedPreferences.edit().putBoolean(SessionManager.SENT_TOKEN_TO_SERVER, registered).apply();
             //session.setRegistered(true);
 
             //sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, true).apply();
@@ -88,9 +87,9 @@ public class RegistrationIntentService extends IntentService {
             Log.d(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            sharedPreferences.edit().putBoolean(SessionManager.SENT_TOKEN_TO_SERVER, false).apply();
             //session.setRegistered(false);
             //sharedPreferences.edit().putBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false).apply();
+            session.setSentToken(false);
         }
         // Notify UI that registration has completed, so the progress indicator can be hidden.
         Intent registrationComplete = new Intent(SessionManager.REGISTRATION_COMPLETE);
@@ -143,6 +142,8 @@ public class RegistrationIntentService extends IntentService {
             boolean success = jObj.getBoolean("success");
 
             Log.e("registration", success+"");
+            session.setToken(jObj.getString("token"));
+            session.setSentToken(success);
             return success;
         } catch (Exception e) {
             e.printStackTrace();

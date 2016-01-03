@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity{
     ListView listView;
     SwipeRefreshLayout swipeLayout;
 
-    SharedPreferences sharedPreferences;
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     ProgressDialog pDialog;
@@ -122,18 +121,10 @@ public class MainActivity extends AppCompatActivity{
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                if (session.isTokenSent()) {
 
-                sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(SessionManager.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-                    /*Intent i = new Intent(Ma, MainActivity.class);
-                    startActivity(i);
-                    finish();*/
-                    //mInformationTextView.setText(getString(R.string.gcm_send_message));
                 } else {
-                    new MyAlertDialog(MainActivity.this, "Gagal", "Silahkan coba kembali", "Try Again");
+
                 }
             }
         };
