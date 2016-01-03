@@ -55,11 +55,12 @@ public class Auth extends AsyncTask<String, Void, String> {
 
         try {
 
-            String query = String.format("nim=%s&password=%s",
+            String query = String.format("nim=%s&password=%s&token=%s",
                     URLEncoder.encode(params[0], charset),
-                    URLEncoder.encode(params[1], charset));
+                    URLEncoder.encode(params[1], charset),
+                    URLEncoder.encode(params[2], charset));
 
-            URL url = new URL("http://api.arifian.com/ada_dosen/auth.php");
+            URL url = new URL("http://api.arifian.com/AdaDosen/user/auth");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);

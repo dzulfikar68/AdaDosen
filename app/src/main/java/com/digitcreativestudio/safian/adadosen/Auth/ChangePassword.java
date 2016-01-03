@@ -58,7 +58,7 @@ public class ChangePassword extends AsyncTask<String, Void, String> {
                     URLEncoder.encode(params[2], charset),
                     URLEncoder.encode(params[3], charset));
 
-            URL url = new URL("http://api.arifian.com/ada_dosen/change_password.php");
+            URL url = new URL("http://api.arifian.com/AdaDosen/user/change_password");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);

@@ -28,11 +28,12 @@ public class Login extends AsyncTask<String, Void, Void> {
         Log.e("Login", params[0]+" "+params[1]);
 
         try {
-            String query = String.format("id=%s&last_login=%s",
+            String query = String.format("id=%s&last_login=%s&token=%s",
                     URLEncoder.encode(params[0], charset),
-                    URLEncoder.encode(params[1], charset));
+                    URLEncoder.encode(params[1], charset),
+                    URLEncoder.encode(params[2], charset));
 
-            URL url = new URL("http://api.arifian.com/ada_dosen/login.php");
+            URL url = new URL("http://api.arifian.com/AdaDosen/user/login");
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setDoOutput(true);
